@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transport - EduManage Pro</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f8fafc;
+            color: #334155;
+        }
+
+      
+       
+
+        .status-badge {
+            background: #10b981;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .status-badge.warning {
+            background: #f59e0b;
+        }
+
+        .status-badge.inactive {
+            background: #6b7280;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border-left: 4px solid #3b82f6;
+        }
+
+        .stat-card.green {
+            border-left-color: #10b981;
+        }
+
+        .stat-card.orange {
+            border-left-color: #f59e0b;
+        }
+
+        .stat-card.purple {
+            border-left-color: #8b5cf6;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .card-header {
+            padding: 20px;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: between;
+            align-items: center;
+        }
+
+        .card-header h2 {
+            color: #1e293b;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .card-content {
+            padding: 20px;
+        }
+
+        .route-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .route-icon {
+            width: 48px;
+            height: 48px;
+            background: #3b82f6;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .route-details h3 {
+            color: #1e293b;
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+
+        .route-details p {
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .driver-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: #f8fafc;
+            border-radius: 6px;
+            margin-bottom: 12px;
+        }
+
+        .driver-avatar {
+            width: 40px;
+            height: 40px;
+            background: #3b82f6;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .driver-details h4 {
+            color: #1e293b;
+            font-size: 14px;
+            margin-bottom: 2px;
+        }
+
+        .driver-details p {
+            color: #64748b;
+            font-size: 12px;
+        }
+
+        .timeline {
+            position: relative;
+        }
+
+        .timeline-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+            position: relative;
+        }
+
+        .timeline-item:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            left: 12px;
+            top: 24px;
+            width: 2px;
+            height: 20px;
+            background: #e2e8f0;
+        }
+
+        .timeline-dot {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            margin-right: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            color: white;
+            font-weight: 600;
+        }
+
+        .timeline-dot.active {
+            background: #10b981;
+        }
+
+        .timeline-dot.upcoming {
+            background: #64748b;
+        }
+
+        .timeline-content {
+            flex: 1;
+        }
+
+        .timeline-content h4 {
+            color: #1e293b;
+            font-size: 14px;
+            margin-bottom: 2px;
+        }
+
+        .timeline-content p {
+            color: #64748b;
+            font-size: 12px;
+        }
+
+        .timeline-time {
+            color: #64748b;
+            font-size: 12px;
+            min-width: 60px;
+            text-align: right;
+        }
+
+        .btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn:hover {
+            background: #2563eb;
+        }
+
+        .btn-secondary {
+            background: #6b7280;
+        }
+
+        .btn-secondary:hover {
+            background: #4b5563;
+        }
+
+        .btn-success {
+            background: #10b981;
+        }
+
+        .btn-success:hover {
+            background: #059669;
+        }
+
+        .full-width-card {
+            grid-column: 1 / -1;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table th,
+        .table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .table th {
+            background: #f8fafc;
+            color: #374151;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .table td {
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .location-tracker {
+            height: 300px;
+            background: #f3f4f6;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6b7280;
+            font-size: 14px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .map-placeholder {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .notifications {
+            background: #fef3c7;
+            border: 1px solid #f59e0b;
+            border-radius: 6px;
+            padding: 12px;
+            margin-bottom: 20px;
+        }
+
+        .notifications h4 {
+            color: #92400e;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .notifications ul {
+            color: #92400e;
+            font-size: 12px;
+            margin-left: 16px;
+        }
+
+        .quick-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        @media (max-width: 768px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .page-header {
+                flex-direction: column;
+                gap: 12px;
+                align-items: flex-start;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+   
+
+        <!-- Transport Notifications -->
+        <div class="notifications">
+            <h4>⚠️ Important Transport Updates</h4>
+            <ul>
+                <li>Route B-12 will be delayed by 15 minutes due to traffic</li>
+                <li>Monthly transport fee payment due on July 5th</li>
+            </ul>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="stats-grid">
+            <div class="stat-card green">
+                <div class="stat-value">On Time</div>
+                <div class="stat-label">Current Status</div>
+            </div>
+            <div class="stat-card orange">
+                <div class="stat-value">₹2,500</div>
+                <div class="stat-label">Monthly Fee</div>
+            </div>
+            <div class="stat-card purple">
+                <div class="stat-value">12.5 km</div>
+                <div class="stat-label">Daily Distance</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">95%</div>
+                <div class="stat-label">Attendance Rate</div>
+            </div>
+        </div>
+
+        <!-- Main Content Grid -->
+        <div class="content-grid">
+            <!-- Route Information -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>Route Information</h2>
+                </div>
+                <div class="card-content">
+                    <div class="route-info">
+                        <div class="route-icon">B-12</div>
+                        <div class="route-details">
+                            <h3>Route B-12 - Gomti Nagar</h3>
+                            <p>Pickup: Gomti Nagar Extension</p>
+                            <p>Drop: Main School Gate</p>
+                        </div>
+                    </div>
+                    
+                    <div class="driver-info">
+                        <div class="driver-avatar">RK</div>
+                        <div class="driver-details">
+                            <h4>Rajesh Kumar</h4>
+                            <p>Driver • License: UP-12345</p>
+                            <p>📞 +91 98765 43210</p>
+                        </div>
+                    </div>
+
+                    <div class="driver-info">
+                        <div class="driver-avatar">MS</div>
+                        <div class="driver-details">
+                            <h4>Mohan Singh</h4>
+                            <p>Conductor • ID: CON-567</p>
+                            <p>📞 +91 87654 32109</p>
+                        </div>
+                    </div>
+
+                    <div class="quick-actions">
+                        <button class="btn btn-success">Contact Driver</button>
+                        <button class="btn btn-secondary">View Route Map</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Today's Schedule -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>Today's Schedule</h2>
+                </div>
+                <div class="card-content">
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-dot active">✓</div>
+                            <div class="timeline-content">
+                                <h4>Morning Pickup</h4>
+                                <p>Gomti Nagar Extension</p>
+                            </div>
+                            <div class="timeline-time">7:30 AM</div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot active">✓</div>
+                            <div class="timeline-content">
+                                <h4>School Arrival</h4>
+                                <p>Main Gate</p>
+                            </div>
+                            <div class="timeline-time">8:15 AM</div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot upcoming">2</div>
+                            <div class="timeline-content">
+                                <h4>Afternoon Departure</h4>
+                                <p>Main Gate</p>
+                            </div>
+                            <div class="timeline-time">2:30 PM</div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot upcoming">3</div>
+                            <div class="timeline-content">
+                                <h4>Evening Drop</h4>
+                                <p>Gomti Nagar Extension</p>
+                            </div>
+                            <div class="timeline-time">3:15 PM</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Live Location Tracker -->
+        <div class="card full-width-card">
+            <div class="card-header">
+                <h2>🚌 Live Bus Tracking</h2>
+                <button class="btn">Refresh Location</button>
+            </div>
+            <div class="card-content">
+                <div class="location-tracker">
+                    <div class="map-placeholder">
+                        🗺️ Live GPS Tracking
+                        <br>
+                        <small>Bus B-12 currently at: Sector 10, Gomti Nagar</small>
+                        <br>
+                        <small>ETA: 5 minutes</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Transport History & Fee Status -->
+        <div class="content-grid">
+            <!-- Fee Status -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>Fee Status</h2>
+                </div>
+                <div class="card-content">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Month</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>June 2025</td>
+                                <td>₹2,500</td>
+                                <td><span class="status-badge">Paid</span></td>
+                            </tr>
+                            <tr>
+                                <td>July 2025</td>
+                                <td>₹2,500</td>
+                                <td><span class="status-badge warning">Pending</span></td>
+                            </tr>
+                            <tr>
+                                <td>August 2025</td>
+                                <td>₹2,500</td>
+                                <td><span class="status-badge inactive">Upcoming</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div style="margin-top: 16px;">
+                        <button class="btn btn-success">Pay Now</button>
+                        <button class="btn btn-secondary">Download Receipt</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Transport History -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>Recent Transport History</h2>
+                </div>
+                <div class="card-content">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Pickup</th>
+                                <th>Drop</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>June 29</td>
+                                <td>7:32 AM</td>
+                                <td>3:18 PM</td>
+                                <td><span class="status-badge">Completed</span></td>
+                            </tr>
+                            <tr>
+                                <td>June 28</td>
+                                <td>7:35 AM</td>
+                                <td>3:20 PM</td>
+                                <td><span class="status-badge">Completed</span></td>
+                            </tr>
+                            <tr>
+                                <td>June 27</td>
+                                <td>7:30 AM</td>
+                                <td>-</td>
+                                <td><span class="status-badge inactive">Absent</span></td>
+                            </tr>
+                            <tr>
+                                <td>June 26</td>
+                                <td>7:28 AM</td>
+                                <td>3:15 PM</td>
+                                <td><span class="status-badge">Completed</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Emergency Contacts & Quick Actions -->
+        <div class="content-grid">
+            <!-- Emergency Contacts -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>🚨 Emergency Contacts</h2>
+                </div>
+                <div class="card-content">
+                    <div class="driver-info">
+                        <div class="driver-avatar">TR</div>
+                        <div class="driver-details">
+                            <h4>Transport Coordinator</h4>
+                            <p>Mr. Amit Sharma</p>
+                            <p>📞 +91 98765 00001</p>
+                        </div>
+                    </div>
+                    <div class="driver-info">
+                        <div class="driver-avatar">SC</div>
+                        <div class="driver-details">
+                            <h4>School Office</h4>
+                            <p>Main Reception</p>
+                            <p>📞 +91 98765 00002</p>
+                        </div>
+                    </div>
+                    <div class="quick-actions">
+                        <button class="btn btn-success">Call Now</button>
+                        <button class="btn btn-secondary">Send Message</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>Quick Actions</h2>
+                </div>
+                <div class="card-content">
+                    <div style="display: flex; flex-direction: column; gap: 12px;">
+                        <button class="btn">📝 Request Route Change</button>
+                        <button class="btn">🚫 Report Absence</button>
+                        <button class="btn">📍 Update Pickup Location</button>
+                        <button class="btn">💰 View Fee Structure</button>
+                        <button class="btn">📊 Download Monthly Report</button>
+                        <button class="btn">🔔 Set Pickup Notifications</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simple JavaScript for interactivity
+        document.addEventListener('DOMContentLoaded', function() {
+            // Refresh location button
+            const refreshBtn = document.querySelector('.card-header .btn');
+            if (refreshBtn) {
+                refreshBtn.addEventListener('click', function() {
+                    this.textContent = 'Refreshing...';
+                    setTimeout(() => {
+                        this.textContent = 'Refresh Location';
+                        // Simulate location update
+                        const mapPlaceholder = document.querySelector('.map-placeholder');
+                        if (mapPlaceholder) {
+                            mapPlaceholder.innerHTML = `
+                                🗺️ Live GPS Tracking
+                                <br>
+                                <small>Bus B-12 currently at: Sector 8, Gomti Nagar</small>
+                                <br>
+                                <small>ETA: 3 minutes</small>
+                            `;
+                        }
+                    }, 2000);
+                });
+            }
+
+            // Contact buttons
+            const contactBtns = document.querySelectorAll('.btn-success');
+            contactBtns.forEach(btn => {
+                if (btn.textContent.includes('Contact') || btn.textContent.includes('Call')) {
+                    btn.addEventListener('click', function() {
+                        alert('Contacting driver... In a real app, this would open the phone dialer.');
+                    });
+                }
+            });
+
+            // Pay Now button
+            const payBtn = document.querySelector('.btn-success');
+            if (payBtn && payBtn.textContent === 'Pay Now') {
+                payBtn.addEventListener('click', function() {
+                    alert('Redirecting to payment gateway... In a real app, this would open the payment interface.');
+                });
+            }
+
+            // Quick action buttons
+            const quickActionBtns = document.querySelectorAll('.card:last-child .btn');
+            quickActionBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const action = this.textContent.trim();
+                    alert(`${action} feature would be implemented in the full application.`);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

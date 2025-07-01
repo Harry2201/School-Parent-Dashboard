@@ -1,0 +1,274 @@
+<button id="menu-btn" class="menu-btn" aria-label="Open sidebar">&#9776;</button>
+<!-- Dashboard Content -->
+      <div class="dashboard-content" id="main-content">
+ 
+</div>
+
+
+        <!-- Quick Stats -->
+        <div class="quick-stats">
+          <div class="stat-card">
+            <h3>93%</h3>
+            <div class="circular-progress" data-percentage="90">
+              <svg viewBox="0 0 36 36" class="circular-chart">
+                <path
+                  class="circle-bg"
+                  d="M18 2.0845
+             a 15.9155 15.9155 0 0 1 0 31.831
+             a 15.9155 15.9155 0 0 1 0 -31.831"
+                />
+                <path
+                  class="circle"
+                  stroke-dasharray="90, 100"
+                  d="M18 2.0845
+             a 15.9155 15.9155 0 0 1 0 31.831
+             a 15.9155 15.9155 0 0 1 0 -31.831"
+                />
+                <text x="18" y="20.35" class="percentage-text">90%</text>
+              </svg>
+            </div>
+
+            <p>Overall Attendance</p>
+          </div>
+          <div class="stat-card">
+            <h3>85%</h3>
+            <p>Average Grade</p>
+          </div>
+          <div class="stat-card">
+            <h3>3</h3>
+            <p>Pending Assignments</p>
+          </div>
+          <div class="stat-card">
+            <h3>2</h3>
+            <p>Upcoming Events</p>
+          </div>
+        </div>
+        
+
+        <!-- Dashboard Cards -->
+        <div class="card-container">
+          <!-- Row 1 -->
+          <div class="card blue">
+            <div class="card-icon">
+              <i class="fas fa-chart-line"></i>
+            </div>
+            <h3>Academic Progress</h3>
+            <p>View grades, report cards and academic performance</p>
+            <a href="#" class="card-btn"
+              >View Progress <i class="fas fa-arrow-right"></i
+            ></a>
+          </div>
+
+          <div class="card green">
+            <div class="card-icon">
+              <i class="fas fa-calendar-check"></i>
+            </div>
+            <h3>Attendance Tracker</h3>
+            <p>Monitor daily attendance and absence records</p>
+            <a href="#" class="card-btn"
+              >Check Attendance <i class="fas fa-arrow-right"></i
+            ></a>
+          </div>
+
+          <div class="card orange">
+            <div class="card-icon">
+              <i class="fas fa-tasks"></i>
+            </div>
+            <h3>Assignments</h3>
+            <p>Track homework, projects and submission status</p>
+            <a href="#" class="card-btn"
+              >View Tasks <i class="fas fa-arrow-right"></i
+            ></a>
+          </div>
+
+          <!-- Row 2 -->
+          <div class="card purple">
+            <div class="card-icon">
+              <i class="fas fa-poll"></i>
+            </div>
+            <h3>Exam Results</h3>
+            <p>Access test scores and detailed result analysis</p>
+            <a href="#" class="card-btn"
+              >View Results <i class="fas fa-arrow-right"></i
+            ></a>
+          </div>
+
+          <div class="card red">
+            <div class="card-icon">
+              <i class="fas fa-money-bill-wave"></i>
+            </div>
+            <h3>Fee Status</h3>
+            <p>Check payment history and pending dues</p>
+            <a href="#" class="card-btn"
+              >Check Fees <i class="fas fa-arrow-right"></i
+            ></a>
+          </div>
+
+          <div class="card teal">
+            <div class="card-icon">
+              <i class="fas fa-clock"></i>
+            </div>
+            <h3>Timetable</h3>
+            <p>View class schedule and daily routine</p>
+            <a href="#" class="card-btn"
+              >View Schedule <i class="fas fa-arrow-right"></i
+            ></a>
+          </div>
+
+          <!-- Row 3 -->
+          <div class="card pink">
+            <div class="card-icon">
+              <i class="fas fa-bell"></i>
+            </div>
+            <h3>School Notices</h3>
+            <p>Important announcements and updates</p>
+            <a href="#" class="card-btn"
+              >Read Notices <i class="fas fa-arrow-right"></i
+            ></a>
+          </div>
+
+          <div class="card violet">
+            <div class="card-icon">
+              <i class="fas fa-comments"></i>
+            </div>
+            <h3>Messages</h3>
+            <p>Communicate with teachers and school staff</p>
+            <a href="#" class="card-btn"
+              >View Messages <i class="fas fa-arrow-right"></i
+            ></a>
+          </div>
+
+          <div class="card gray">
+            <div class="card-icon">
+              <i class="fas fa-calendar-alt"></i>
+            </div>
+            <h3>School Events</h3>
+            <p>Upcoming activities and important dates</p>
+            <a href="#" class="card-btn"
+              >View Events <i class="fas fa-arrow-right"></i
+            ></a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modals -->
+    <div id="progressModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2><i class="fas fa-chart-line"></i> Academic Progress</h2>
+          <button class="modal-close">&times;</button>
+        </div>
+        <div id="progressContent">
+          <div class="progress-item">
+            <h4>Mathematics</h4>
+            <p>Current Grade: <span class="grade-badge grade-a">A</span></p>
+            <p>Last Test: 92% (Algebra Quiz)</p>
+            <p>Teacher: Mrs. Smith</p>
+          </div>
+          <div class="progress-item">
+            <h4>English Literature</h4>
+            <p>Current Grade: <span class="grade-badge grade-b">B+</span></p>
+            <p>Last Assignment: 88% (Essay on Shakespeare)</p>
+            <p>Teacher: Mr. Johnson</p>
+          </div>
+          <div class="progress-item">
+            <h4>Science</h4>
+            <p>Current Grade: <span class="grade-badge grade-a">A-</span></p>
+            <p>Last Lab: 94% (Chemistry Experiment)</p>
+            <p>Teacher: Dr. Wilson</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="attendanceModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2><i class="fas fa-calendar-check"></i> Attendance Record</h2>
+          <button class="modal-close">&times;</button>
+        </div>
+        <div id="attendanceContent">
+          <div class="progress-item">
+            <h4>This Week</h4>
+            <p>Present: 4 days | Absent: 1 day</p>
+            <p>Monday: ✅ Present</p>
+            <p>Tuesday: ✅ Present</p>
+            <p>Wednesday: ❌ Absent (Sick Leave)</p>
+            <p>Thursday: ✅ Present</p>
+            <p>Friday: ✅ Present</p>
+          </div>
+          <div class="progress-item">
+            <h4>Monthly Summary</h4>
+            <p>Total Days: 22 | Present: 20 | Absent: 2</p>
+            <p>Attendance Rate: 92%</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="assignmentsModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2><i class="fas fa-tasks"></i> Assignments</h2>
+          <button class="modal-close">&times;</button>
+        </div>
+        <div id="assignmentsContent">
+          <div class="assignment-item">
+            <h4>Math Homework - Chapter 5</h4>
+            <p>Due: Tomorrow</p>
+            <p>
+              Status: <span class="status-badge status-pending">Pending</span>
+            </p>
+            <p>Subject: Mathematics</p>
+          </div>
+          <div class="assignment-item">
+            <h4>Science Project - Solar System</h4>
+            <p>Due: Next Friday</p>
+            <p>
+              Status:
+              <span class="status-badge status-pending">In Progress</span>
+            </p>
+            <p>Subject: Science</p>
+          </div>
+          <div class="assignment-item">
+            <h4>English Essay - My Summer</h4>
+            <p>Due: Last Week</p>
+            <p>
+              Status:
+              <span class="status-badge status-completed">Completed</span>
+            </p>
+            <p>Subject: English | Grade: A-</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="noticesModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2><i class="fas fa-bell"></i> School Notices</h2>
+          <button class="modal-close">&times;</button>
+        </div>
+        <div id="noticesContent">
+          <div class="notice-item">
+            <h4>Parent-Teacher Meeting</h4>
+            <p>Date: Next Saturday, 10:00 AM</p>
+            <p>Venue: School Auditorium</p>
+            <p>Please bring your child's report card</p>
+          </div>
+          <div class="notice-item">
+            <h4>Sports Day Event</h4>
+            <p>Date: March 15th, 2024</p>
+            <p>Registration deadline: March 1st</p>
+            <p>Various competitions for all grade levels</p>
+          </div>
+          <div class="notice-item">
+            <h4>School Holiday</h4>
+            <p>Date: February 20th (President's Day)</p>
+            <p>School will remain closed</p>
+            <p>Classes will resume on February 21st</p>
+          </div>
+        </div>
+      </div>
+    </div>

@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Events - EduManage Pro</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+        }
+
+       
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e0e6ed;
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .breadcrumb {
+            color: #7f8c8d;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .filters-section {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            margin-bottom: 25px;
+        }
+
+        .filters-row {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .filter-label {
+            font-size: 14px;
+            font-weight: 500;
+            color: #555;
+        }
+
+        .filter-select, .filter-input {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            min-width: 150px;
+        }
+
+        .filter-select:focus, .filter-input:focus {
+            outline: none;
+            border-color: #4a90e2;
+            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+        }
+
+        .stats-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            color: #7f8c8d;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .upcoming { color: #e74c3c; }
+        .registered { color: #27ae60; }
+        .completed { color: #7f8c8d; }
+        .mandatory { color: #f39c12; }
+
+        .events-container {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 25px;
+        }
+
+        .events-list {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+
+        .events-header {
+            padding: 20px;
+            border-bottom: 1px solid #f0f3f6;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .events-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .view-toggle {
+            display: flex;
+            background: #f8f9fa;
+            border-radius: 6px;
+            padding: 2px;
+        }
+
+        .toggle-btn {
+            padding: 8px 16px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .toggle-btn.active {
+            background: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .event-item {
+            padding: 20px;
+            border-bottom: 1px solid #f0f3f6;
+            transition: background-color 0.2s;
+        }
+
+        .event-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .event-item:last-child {
+            border-bottom: none;
+        }
+
+        .event-main {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .event-info h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 6px;
+        }
+
+        .event-meta {
+            display: flex;
+            gap: 20px;
+            font-size: 14px;
+            color: #7f8c8d;
+            margin-bottom: 8px;
+        }
+
+        .event-meta span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .event-description {
+            color: #555;
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+
+        .event-tags {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .tag {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .tag.mandatory {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .tag.optional {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .tag.sports {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .tag.academic {
+            background: #cce5ff;
+            color: #004085;
+        }
+
+        .event-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: #4a90e2;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #357abd;
+        }
+
+        .btn-secondary {
+            background: #f8f9fa;
+            color: #555;
+            border: 1px solid #ddd;
+        }
+
+        .btn-secondary:hover {
+            background: #e9ecef;
+        }
+
+        .status {
+            padding: 6px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .status.registered {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status.pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status.closed {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .sidebar-section {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .calendar-widget, .quick-actions {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            padding: 20px;
+        }
+
+        .widget-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .calendar {
+            width: 100%;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .month-year {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .nav-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 4px;
+            color: #4a90e2;
+        }
+
+        .nav-btn:hover {
+            background: #f0f3f6;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 2px;
+            text-align: center;
+        }
+
+        .calendar-day {
+            padding: 8px 4px;
+            font-size: 14px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .calendar-day.header {
+            font-weight: 600;
+            color: #7f8c8d;
+            cursor: default;
+        }
+
+        .calendar-day.today {
+            background: #4a90e2;
+            color: white;
+        }
+
+        .calendar-day.has-event {
+            background: #e3f2fd;
+            color: #1976d2;
+            font-weight: 500;
+        }
+
+        .calendar-day:hover:not(.header) {
+            background: #f0f3f6;
+        }
+
+        .quick-action-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .quick-action-item:hover {
+            background: #f8f9fa;
+        }
+
+        .action-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .icon-calendar { background: #e3f2fd; color: #1976d2; }
+        .icon-notification { background: #fff3e0; color: #f57c00; }
+        .icon-download { background: #e8f5e8; color: #2e7d32; }
+
+        .action-text {
+            flex: 1;
+        }
+
+        .action-title {
+            font-weight: 500;
+            color: #2c3e50;
+            margin-bottom: 2px;
+        }
+
+        .action-subtitle {
+            font-size: 12px;
+            color: #7f8c8d;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                margin-left: 0;
+                padding: 15px;
+            }
+
+            .events-container {
+                grid-template-columns: 1fr;
+            }
+
+            .filters-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .stats-overview {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    
+       
+
+        <!-- Filters Section -->
+        <div class="filters-section">
+            <div class="filters-row">
+                <div class="filter-group">
+                    <label class="filter-label">Event Type</label>
+                    <select class="filter-select" id="eventType">
+                        <option value="all">All Events</option>
+                        <option value="academic">Academic</option>
+                        <option value="sports">Sports</option>
+                        <option value="cultural">Cultural</option>
+                        <option value="meeting">Parent Meeting</option>
+                        <option value="exam">Examinations</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">Status</label>
+                    <select class="filter-select" id="eventStatus">
+                        <option value="all">All Status</option>
+                        <option value="upcoming">Upcoming</option>
+                        <option value="registered">Registered</option>
+                        <option value="completed">Completed</option>
+                        <option value="cancelled">Cancelled</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">Date Range</label>
+                    <input type="date" class="filter-input" id="dateFrom">
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">To</label>
+                    <input type="date" class="filter-input" id="dateTo">
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Overview -->
+        <div class="stats-overview">
+            <div class="stat-card">
+                <div class="stat-number upcoming">8</div>
+                <div class="stat-label">Upcoming Events</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number registered">5</div>
+                <div class="stat-label">Registered Events</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number completed">12</div>
+                <div class="stat-label">Completed Events</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number mandatory">3</div>
+                <div class="stat-label">Mandatory Events</div>
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="events-container">
+            <!-- Events List -->
+            <div class="events-list">
+                <div class="events-header">
+                    <h2 class="events-title">Upcoming Events</h2>
+                    <div class="view-toggle">
+                        <button class="toggle-btn active">List View</button>
+                        <button class="toggle-btn">Calendar View</button>
+                    </div>
+                </div>
+
+                <!-- Event Items -->
+                <div class="event-item">
+                    <div class="event-main">
+                        <div class="event-info">
+                            <h3>Parent-Teacher Conference</h3>
+                            <div class="event-meta">
+                                <span>📅 July 15, 2025</span>
+                                <span>🕐 2:00 PM - 5:00 PM</span>
+                                <span>📍 School Auditorium</span>
+                            </div>
+                            <div class="event-description">
+                                Individual meetings with teachers to discuss Emma's academic progress, behavior, and upcoming semester plans.
+                            </div>
+                            <div class="event-tags">
+                                <span class="tag mandatory">Mandatory</span>
+                                <span class="tag academic">Academic</span>
+                            </div>
+                        </div>
+                        <div class="status pending">Registration Required</div>
+                    </div>
+                    <div class="event-actions">
+                        <button class="btn btn-primary">Register Now</button>
+                        <button class="btn btn-secondary">View Details</button>
+                    </div>
+                </div>
+
+                <div class="event-item">
+                    <div class="event-main">
+                        <div class="event-info">
+                            <h3>Annual Sports Day</h3>
+                            <div class="event-meta">
+                                <span>📅 July 22, 2025</span>
+                                <span>🕐 9:00 AM - 4:00 PM</span>
+                                <span>📍 School Playground</span>
+                            </div>
+                            <div class="event-description">
+                                Inter-house sports competition featuring track and field events, team sports, and award ceremony.
+                            </div>
+                            <div class="event-tags">
+                                <span class="tag optional">Optional</span>
+                                <span class="tag sports">Sports</span>
+                            </div>
+                        </div>
+                        <div class="status registered">Registered</div>
+                    </div>
+                    <div class="event-actions">
+                        <button class="btn btn-secondary">View Details</button>
+                        <button class="btn btn-secondary">Download Permission Slip</button>
+                    </div>
+                </div>
+
+                <div class="event-item">
+                    <div class="event-main">
+                        <div class="event-info">
+                            <h3>Science Fair Exhibition</h3>
+                            <div class="event-meta">
+                                <span>📅 August 5, 2025</span>
+                                <span>🕐 10:00 AM - 2:00 PM</span>
+                                <span>📍 Science Laboratory</span>
+                            </div>
+                            <div class="event-description">
+                                Students will showcase their science projects. Parents are invited to view exhibitions and participate in judging.
+                            </div>
+                            <div class="event-tags">
+                                <span class="tag mandatory">Mandatory</span>
+                                <span class="tag academic">Academic</span>
+                            </div>
+                        </div>
+                        <div class="status pending">Registration Opens Soon</div>
+                    </div>
+                    <div class="event-actions">
+                        <button class="btn btn-secondary">Set Reminder</button>
+                        <button class="btn btn-secondary">View Details</button>
+                    </div>
+                </div>
+
+                <div class="event-item">
+                    <div class="event-main">
+                        <div class="event-info">
+                            <h3>Cultural Festival</h3>
+                            <div class="event-meta">
+                                <span>📅 August 12, 2025</span>
+                                <span>🕐 6:00 PM - 9:00 PM</span>
+                                <span>📍 School Auditorium</span>
+                            </div>
+                            <div class="event-description">
+                                Annual cultural celebration featuring student performances, art exhibitions, and traditional food stalls.
+                            </div>
+                            <div class="event-tags">
+                                <span class="tag optional">Optional</span>
+                                <span class="tag cultural">Cultural</span>
+                            </div>
+                        </div>
+                        <div class="status pending">Registration Required</div>
+                    </div>
+                    <div class="event-actions">
+                        <button class="btn btn-primary">Register Family</button>
+                        <button class="btn btn-secondary">View Program</button>
+                    </div>
+                </div>
+
+                <div class="event-item">
+                    <div class="event-main">
+                        <div class="event-info">
+                            <h3>Mid-Term Exam Schedule</h3>
+                            <div class="event-meta">
+                                <span>📅 August 18-22, 2025</span>
+                                <span>🕐 9:00 AM - 12:00 PM</span>
+                                <span>📍 Classrooms</span>
+                            </div>
+                            <div class="event-description">
+                                Mid-semester examinations for all subjects. Detailed schedule and exam guidelines available.
+                            </div>
+                            <div class="event-tags">
+                                <span class="tag mandatory">Mandatory</span>
+                                <span class="tag academic">Exam</span>
+                            </div>
+                        </div>
+                        <div class="status registered">Schedule Downloaded</div>
+                    </div>
+                    <div class="event-actions">
+                        <button class="btn btn-secondary">Download Schedule</button>
+                        <button class="btn btn-secondary">Exam Guidelines</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="sidebar-section">
+                <!-- Calendar Widget -->
+                <div class="calendar-widget">
+                    <h3 class="widget-title">Event Calendar</h3>
+                    <div class="calendar">
+                        <div class="calendar-header">
+                            <button class="nav-btn">‹</button>
+                            <span class="month-year">July 2025</span>
+                            <button class="nav-btn">›</button>
+                        </div>
+                        <div class="calendar-grid">
+                            <div class="calendar-day header">Sun</div>
+                            <div class="calendar-day header">Mon</div>
+                            <div class="calendar-day header">Tue</div>
+                            <div class="calendar-day header">Wed</div>
+                            <div class="calendar-day header">Thu</div>
+                            <div class="calendar-day header">Fri</div>
+                            <div class="calendar-day header">Sat</div>
+                            
+                            <div class="calendar-day">29</div>
+                            <div class="calendar-day today">30</div>
+                            <div class="calendar-day">1</div>
+                            <div class="calendar-day">2</div>
+                            <div class="calendar-day">3</div>
+                            <div class="calendar-day">4</div>
+                            <div class="calendar-day">5</div>
+                            
+                            <div class="calendar-day">6</div>
+                            <div class="calendar-day">7</div>
+                            <div class="calendar-day">8</div>
+                            <div class="calendar-day">9</div>
+                            <div class="calendar-day">10</div>
+                            <div class="calendar-day">11</div>
+                            <div class="calendar-day">12</div>
+                            
+                            <div class="calendar-day">13</div>
+                            <div class="calendar-day">14</div>
+                            <div class="calendar-day has-event">15</div>
+                            <div class="calendar-day">16</div>
+                            <div class="calendar-day">17</div>
+                            <div class="calendar-day">18</div>
+                            <div class="calendar-day">19</div>
+                            
+                            <div class="calendar-day">20</div>
+                            <div class="calendar-day">21</div>
+                            <div class="calendar-day has-event">22</div>
+                            <div class="calendar-day">23</div>
+                            <div class="calendar-day">24</div>
+                            <div class="calendar-day">25</div>
+                            <div class="calendar-day">26</div>
+                            
+                            <div class="calendar-day">27</div>
+                            <div class="calendar-day">28</div>
+                            <div class="calendar-day">29</div>
+                            <div class="calendar-day">30</div>
+                            <div class="calendar-day">31</div>
+                            <div class="calendar-day">1</div>
+                            <div class="calendar-day">2</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="quick-actions">
+                    <h3 class="widget-title">Quick Actions</h3>
+                    
+                    <div class="quick-action-item">
+                        <div class="action-icon icon-calendar">📅</div>
+                        <div class="action-text">
+                            <div class="action-title">Add to Calendar</div>
+                            <div class="action-subtitle">Export events to personal calendar</div>
+                        </div>
+                    </div>
+                    
+                    <div class="quick-action-item">
+                        <div class="action-icon icon-notification">🔔</div>
+                        <div class="action-text">
+                            <div class="action-title">Event Notifications</div>
+                            <div class="action-subtitle">Manage reminder settings</div>
+                        </div>
+                    </div>
+                    
+                    <div class="quick-action-item">
+                        <div class="action-icon icon-download">📄</div>
+                        <div class="action-text">
+                            <div class="action-title">Download Event List</div>
+                            <div class="action-subtitle">Export upcoming events</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Filter functionality
+        document.getElementById('eventType').addEventListener('change', function() {
+            filterEvents();
+        });
+
+        document.getElementById('eventStatus').addEventListener('change', function() {
+            filterEvents();
+        });
+
+        function filterEvents() {
+            const typeFilter = document.getElementById('eventType').value;
+            const statusFilter = document.getElementById('eventStatus').value;
+            
+            // In a real application, this would filter the events
+            console.log('Filtering events by:', { type: typeFilter, status: statusFilter });
+        }
+
+        // View toggle functionality
+        document.querySelectorAll('.toggle-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                if (this.textContent === 'Calendar View') {
+                    // Switch to calendar view
+                    console.log('Switching to calendar view');
+                } else {
+                    // Switch to list view
+                    console.log('Switching to list view');
+                }
+            });
+        });
+
+        // Calendar navigation
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const direction = this.textContent.trim();
+                if (direction === '‹') {
+                    // Previous month
+                    console.log('Previous month');
+                } else {
+                    // Next month
+                    console.log('Next month');
+                }
+            });
+        });
+
+        // Event registration buttons
+        document.querySelectorAll('.btn-primary').forEach(btn => {
+            btn.addEventListener('click', function() {
+                if (this.textContent.includes('Register')) {
+                    alert('Registration form would open here');
+                }
+            });
+        });
+
+        // Quick actions
+        document.querySelectorAll('.quick-action-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const title = this.querySelector('.action-title').textContent;
+                alert(`${title} functionality would be implemented here`);
+            });
+        });
+
+        // Calendar day clicks
+        document.querySelectorAll('.calendar-day:not(.header)').forEach(day => {
+            day.addEventListener('click', function() {
+                if (this.classList.contains('has-event')) {
+                    alert('Events for this day would be shown');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

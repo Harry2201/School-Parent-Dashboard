@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>School Parents Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css" />
+    
+    <script
+      src="https://kit.fontawesome.com/your-kit-code.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body>
+   
+    <!-- Sidebar Navigation -->
+    <div class="sidebar">
+      <div class="sidebar-header">
+        <i class="fas fa-graduation-cap"></i>
+        <h3>EduManage Pro</h3>
+        <button class="close-btn" id="close-btn">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+       <div class="sidebar-menu">
+      <h4>Overview</h4>
+      <ul>
+        <li><a href="#" onclick="loadPage('dashboard.html')"><i class="fas fa-tachometer-alt"></i> <div class="menu-item" data-title="Parents Dashboard"></div><span>Dashboard</span></a></li>
+        <li><a href="#" onclick="loadPage('myprofile.html')"><i class="fas fa-user-circle"></i> <div class="menu-item" data-title="My Profile"></div><span>My Profile</span></a></li>
+      </ul>
+        <h4>Academic</h4>
+        <ul>
+          <li>
+            <a href="#" onclick="loadPage('academic_progress.html')">
+              <i class="fas fa-chart-line"></i>
+              <span>Academic Progress</span></a
+            >
+          </li>
+          <li>
+            <a href="#" onclick="loadPage('assignment.html')">
+              <i class="fas fa-tasks"></i> <span>Assignments</span></a
+            >
+          </li>
+          <li>
+            <a href="#" onclick="loadPage('attendence.html')">
+              <i class="fas fa-calendar-check"></i> <span>Attendance</span></a
+            >
+          </li>
+          <li>
+             <a href="#" onclick="loadPage('timetable.html')">
+              <i class="fas fa-clock"></i> <span>Timetable</span></a>
+          </li>
+        </ul>
+
+        <h4>School Life</h4>
+        <ul>
+          <li>
+            <a href="#" onclick="loadPage('exam_result.html')"
+              ><i class="fas fa-poll"></i> <span>Exam Results</span></a
+            >
+          </li>
+          <li>
+            <a href="#" onclick="loadPage('notice.html')"><i class="fas fa-bell"></i> <span>Notices</span></a>
+          </li>
+          <li>
+            <a href="#" onclick="loadPage('events.html')"
+              ><i class="fas fa-calendar-alt"></i> <span>Events</span></a
+            >
+          </li>
+          <li>
+            <a href="#" onclick="loadPage('transport.html')"><i class="fas fa-bus"></i> <span>Transport</span></a>
+          </li>
+          <li>
+            <a href="#" onclick="loadPage('fee_status.html')"
+              ><i class="fas fa-money-bill-wave"></i> <span>Fee Status</span></a
+            >
+          </li>
+        </ul>
+
+       
+      </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="main-content">
+      
+      <!-- Header -->
+      <div class="header">
+        <div class="header-left">
+          <button class="menu-btn" id="menu-btn">
+            <i class="fas fa-bars"></i>
+          </button>
+          <h1 class="header-title">Parents Dashboard</h1>
+          <div class="child-selector">
+            <i class="fas fa-user-graduate"></i>
+            
+            <select id="childSelect">
+              <option value="emma">Emma Johnson - Grade 8</option>
+              <option value="alex">Alex Johnson - Grade 5</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="header-right">
+          <div class="notification-bell">
+            <i class="fas fa-bell"></i>
+            <span class="notification-badge">5</span>
+          </div>
+
+          <div class="user-profile">
+            <img
+              src="https://randomuser.me/api/portraits/women/44.jpg"
+              alt="Parent"
+            />
+            <span>Mrs. Danial</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dashboard Content -->
+      <div class="dashboard-content" id="main-content">
+ 
+</div>
+
+
+       
+    <script src="script.js"></script>
+  </body>
+</html>

@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>School Notices - EduManage Pro</title>
+    <link rel="stylesheet" href="style.css" />
+    
+  </head>
+  <body>
+    
+      <!-- Page Header -->
+      <div class="page-header">
+        <div class="header-actions">
+          <button class="btn btn-secondary" onclick="toggleArchived()">
+            📁 View Archive
+          </button>
+          <button class="btn btn-primary" onclick="showNewNoticeModal()">
+            ➕ New Notice
+          </button>
+        </div>
+      </div>
+
+      <div class="notices-container">
+        <!-- Main Notices Section -->
+        <div class="notices-main">
+          <div class="notices-header">
+            <h2 class="notices-title">All Notices</h2>
+            <div class="filter-tabs">
+              <button class="tab active" onclick="filterNotices('all')">
+                All
+              </button>
+              <button class="tab" onclick="filterNotices('unread')">
+                Unread
+              </button>
+              <button class="tab" onclick="filterNotices('urgent')">
+                Urgent
+              </button>
+              <button class="tab" onclick="filterNotices('academic')">
+                Academic
+              </button>
+            </div>
+          </div>
+
+          <div class="search-filter">
+            <div class="search-box">
+              <input
+                type="text"
+                class="search-input"
+                placeholder="Search notices..."
+                oninput="searchNotices(this.value)"
+              />
+              <span class="search-icon">🔍</span>
+            </div>
+            <select
+              class="filter-select"
+              onchange="filterByCategory(this.value)"
+            >
+              <option value="">All Categories</option>
+              <option value="academic">Academic</option>
+              <option value="events">Events</option>
+              <option value="administrative">Administrative</option>
+              <option value="sports">Sports</option>
+              <option value="general">General</option>
+            </select>
+            <select class="filter-select" onchange="sortNotices(this.value)">
+              <option value="newest">Newest First</option>
+              <option value="oldest">Oldest First</option>
+              <option value="priority">By Priority</option>
+            </select>
+          </div>
+
+          <div class="notices-list" id="noticesList">
+            <!-- Notice Items -->
+            <div class="notice-item unread urgent" onclick="openNotice(1)">
+              <div class="priority-badge priority-high">High</div>
+              <div class="notice-header">
+                <div>
+                  <div class="notice-title">
+                    Emergency School Closure - Weather Alert
+                  </div>
+                  <div class="notice-meta">
+                    <span class="notice-date">Today, 8:30 AM</span>
+                    <span class="notice-category">Administrative</span>
+                  </div>
+                </div>
+              </div>
+              <div class="notice-excerpt">
+                Due to severe weather conditions, all classes are cancelled
+                today. Please ensure students remain at home...
+              </div>
+            </div>
+
+            <div class="notice-item unread" onclick="openNotice(2)">
+              <div class="priority-badge priority-medium">Medium</div>
+              <div class="notice-header">
+                <div>
+                  <div class="notice-title">
+                    Parent-Teacher Conference Schedule
+                  </div>
+                  <div class="notice-meta">
+                    <span class="notice-date">Yesterday, 2:15 PM</span>
+                    <span class="notice-category">Academic</span>
+                  </div>
+                </div>
+              </div>
+              <div class="notice-excerpt">
+                The parent-teacher conferences are scheduled for next week.
+                Please check your individual appointment times...
+              </div>
+            </div>
+
+            <div class="notice-item" onclick="openNotice(3)">
+              <div class="priority-badge priority-low">Low</div>
+              <div class="notice-header">
+                <div>
+                  <div class="notice-title">
+                    Annual Science Fair Registration Open
+                  </div>
+                  <div class="notice-meta">
+                    <span class="notice-date">Jun 28, 10:00 AM</span>
+                    <span class="notice-category">Events</span>
+                  </div>
+                </div>
+              </div>
+              <div class="notice-excerpt">
+                Students can now register for the annual science fair. Deadline
+                for submissions is July 15th...
+              </div>
+            </div>
+
+            <div class="notice-item" onclick="openNotice(4)">
+              <div class="priority-badge priority-medium">Medium</div>
+              <div class="notice-header">
+                <div>
+                  <div class="notice-title">Updated School Lunch Menu</div>
+                  <div class="notice-meta">
+                    <span class="notice-date">Jun 27, 4:45 PM</span>
+                    <span class="notice-category">General</span>
+                  </div>
+                </div>
+              </div>
+              <div class="notice-excerpt">
+                The cafeteria has updated the lunch menu for next month. New
+                healthy options have been added...
+              </div>
+            </div>
+
+            <div class="notice-item" onclick="openNotice(5)">
+              <div class="priority-badge priority-high">High</div>
+              <div class="notice-header">
+                <div>
+                  <div class="notice-title">
+                    Math Olympiad Competition Results
+                  </div>
+                  <div class="notice-meta">
+                    <span class="notice-date">Jun 26, 11:30 AM</span>
+                    <span class="notice-category">Academic</span>
+                  </div>
+                </div>
+              </div>
+              <div class="notice-excerpt">
+                Congratulations to all participants! Emma Johnson from Grade 8
+                secured first place in the regional competition...
+              </div>
+            </div>
+
+            <div class="notice-item" onclick="openNotice(6)">
+              <div class="priority-badge priority-low">Low</div>
+              <div class="notice-header">
+                <div>
+                  <div class="notice-title">Library Book Return Reminder</div>
+                  <div class="notice-meta">
+                    <span class="notice-date">Jun 25, 9:20 AM</span>
+                    <span class="notice-category">General</span>
+                  </div>
+                </div>
+              </div>
+              <div class="notice-excerpt">
+                Please ensure all library books are returned by the end of this
+                month to avoid late fees...
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="sidebar-section">
+          <!-- Quick Stats -->
+          <div class="quick-stats">
+            <h3 class="stats-title">Notice Statistics</h3>
+            <div class="stat-item">
+              <span class="stat-label">Total Notices</span>
+              <span class="stat-value">24</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">Unread</span>
+              <span class="stat-value">3</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">High Priority</span>
+              <span class="stat-value">2</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">This Week</span>
+              <span class="stat-value">8</span>
+            </div>
+          </div>
+
+          <!-- Categories -->
+          <div class="categories-widget">
+            <h3 class="stats-title">Categories</h3>
+            <div class="category-item" onclick="filterByCategory('academic')">
+              <div class="category-name">
+                <div class="category-color" style="background: #3498db"></div>
+                Academic
+              </div>
+              <span class="category-count">8</span>
+            </div>
+            <div class="category-item" onclick="filterByCategory('events')">
+              <div class="category-name">
+                <div class="category-color" style="background: #e74c3c"></div>
+                Events
+              </div>
+              <span class="category-count">6</span>
+            </div>
+            <div
+              class="category-item"
+              onclick="filterByCategory('administrative')"
+            >
+              <div class="category-name">
+                <div class="category-color" style="background: #f39c12"></div>
+                Administrative
+              </div>
+              <span class="category-count">4</span>
+            </div>
+            <div class="category-item" onclick="filterByCategory('sports')">
+              <div class="category-name">
+                <div class="category-color" style="background: #27ae60"></div>
+                Sports
+              </div>
+              <span class="category-count">3</span>
+            </div>
+            <div class="category-item" onclick="filterByCategory('general')">
+              <div class="category-name">
+                <div class="category-color" style="background: #9b59b6"></div>
+                General
+              </div>
+              <span class="category-count">3</span>
+            </div>
+          </div>
+
+          <!-- Recent Activity -->
+          <div class="recent-activity">
+            <h3 class="stats-title">Recent Activity</h3>
+            <div class="activity-item">
+              <div class="activity-icon" style="background: #3498db">📢</div>
+              <div class="activity-content">
+                <div class="activity-text">
+                  New notice posted: Emergency School Closure
+                </div>
+                <div class="activity-time">2 hours ago</div>
+              </div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-icon" style="background: #27ae60">✅</div>
+              <div class="activity-content">
+                <div class="activity-text">
+                  Notice read: Parent-Teacher Conference
+                </div>
+                <div class="activity-time">1 day ago</div>
+              </div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-icon" style="background: #e74c3c">🏆</div>
+              <div class="activity-content">
+                <div class="activity-text">
+                  Important notice: Math Olympiad Results
+                </div>
+                <div class="activity-time">2 days ago</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Sample notices data
+      let allNotices = [
+        {
+          id: 1,
+          title: "Emergency School Closure - Weather Alert",
+          excerpt:
+            "Due to severe weather conditions, all classes are cancelled today. Please ensure students remain at home...",
+          category: "administrative",
+          priority: "high",
+          date: "Today, 8:30 AM",
+          isRead: false,
+          isUrgent: true,
+        },
+        {
+          id: 2,
+          title: "Parent-Teacher Conference Schedule",
+          excerpt:
+            "The parent-teacher conferences are scheduled for next week. Please check your individual appointment times...",
+          category: "academic",
+          priority: "medium",
+          date: "Yesterday, 2:15 PM",
+          isRead: false,
+          isUrgent: false,
+        },
+        // Add more notices as needed
+      ];
+
+      let currentFilter = "all";
+      let currentCategory = "";
+      let currentSort = "newest";
+
+      function filterNotices(filter) {
+        currentFilter = filter;
+        updateActiveTab(filter);
+        renderNotices();
+      }
+
+      function updateActiveTab(activeFilter) {
+        document.querySelectorAll(".tab").forEach((tab) => {
+          tab.classList.remove("active");
+        });
+        event.target.classList.add("active");
+      }
+
+      function filterByCategory(category) {
+        currentCategory = category;
+        renderNotices();
+      }
+
+      function sortNotices(sortBy) {
+        currentSort = sortBy;
+        renderNotices();
+      }
+
+      function searchNotices(query) {
+        // Implement search functionality
+        const notices = document.querySelectorAll(".notice-item");
+        notices.forEach((notice) => {
+          const title = notice
+            .querySelector(".notice-title")
+            .textContent.toLowerCase();
+          const excerpt = notice
+            .querySelector(".notice-excerpt")
+            .textContent.toLowerCase();
+
+          if (
+            title.includes(query.toLowerCase()) ||
+            excerpt.includes(query.toLowerCase())
+          ) {
+            notice.style.display = "block";
+          } else {
+            notice.style.display = query ? "none" : "block";
+          }
+        });
+      }
+
+      function renderNotices() {
+        // This would typically filter and sort the notices based on current filters
+        console.log(
+          `Filtering by: ${currentFilter}, Category: ${currentCategory}, Sort: ${currentSort}`
+        );
+      }
+
+      function openNotice(noticeId) {
+        // Mark as read and open notice detail
+        const noticeElement = event.currentTarget;
+        noticeElement.classList.remove("unread");
+
+        // Here you would typically open a modal or navigate to notice detail page
+        alert(
+          `Opening notice ${noticeId}. In a real application, this would show the full notice content.`
+        );
+      }
+
+      function showNewNoticeModal() {
+        alert(
+          "This would open a modal to create a new notice. Features would include:\n- Rich text editor\n- Category selection\n- Priority setting\n- Target audience selection\n- Scheduling options"
+        );
+      }
+
+      function toggleArchived() {
+        alert("This would show/hide archived notices");
+      }
+
+      // Initialize the page
+      document.addEventListener("DOMContentLoaded", function () {
+        console.log("School Notices page loaded");
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduManage Pro - Assignments</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+       
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-left: 4px solid;
+        }
+
+        .stat-card.pending { border-left-color: #f59e0b; }
+        .stat-card.completed { border-left-color: #10b981; }
+        .stat-card.overdue { border-left-color: #ef4444; }
+        .stat-card.upcoming { border-left-color: #3b82f6; }
+
+        .stat-number {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 14px;
+        }
+
+        /* Filter Section */
+        .filter-section {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .filter-controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .filter-select, .search-input {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .search-input {
+            width: 250px;
+        }
+
+        /* Assignments Grid */
+        .assignments-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .assignment-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+            border-left: 4px solid;
+        }
+
+        .assignment-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        }
+
+        .assignment-card.pending { border-left-color: #f59e0b; }
+        .assignment-card.completed { border-left-color: #10b981; }
+        .assignment-card.overdue { border-left-color: #ef4444; }
+
+        .assignment-header {
+            display: flex;
+            justify-content: between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .assignment-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .assignment-subject {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .assignment-status {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+            text-transform: uppercase;
+            margin-left: auto;
+        }
+
+        .status-pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-completed {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-overdue {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .assignment-description {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+
+        .assignment-details {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .due-date {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .assignment-score {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .assignment-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2563eb;
+        }
+
+        .btn-secondary {
+            background: #f3f4f6;
+            color: #374151;
+        }
+
+        .btn-secondary:hover {
+            background: #e5e7eb;
+        }
+
+        /* Calendar View */
+        .calendar-view {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .calendar-nav {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 1px;
+            background: #e5e7eb;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .calendar-day {
+            background: white;
+            padding: 10px;
+            min-height: 80px;
+            position: relative;
+        }
+
+        .calendar-day.other-month {
+            background: #f9fafb;
+            color: #9ca3af;
+        }
+
+        .calendar-day.today {
+            background: #eff6ff;
+            border: 2px solid #3b82f6;
+        }
+
+        .assignment-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin: 2px;
+            display: inline-block;
+        }
+
+        .dot-pending { background: #f59e0b; }
+        .dot-completed { background: #10b981; }
+        .dot-overdue { background: #ef4444; }
+
+        /* View Toggle */
+        .view-toggle {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .toggle-btn {
+            padding: 8px 16px;
+            border: 1px solid #ddd;
+            background: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .toggle-btn.active {
+            background: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Upcoming Deadlines */
+        .upcoming-deadlines {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 20px;
+        }
+
+        .deadline-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            background: #f9fafb;
+        }
+
+        .deadline-date {
+            font-weight: 600;
+            color: #ef4444;
+            min-width: 80px;
+        }
+
+        .deadline-info {
+            flex: 1;
+        }
+
+        .deadline-title {
+            font-weight: 500;
+            margin-bottom: 2px;
+        }
+
+        .deadline-subject {
+            color: #666;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+   
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card pending">
+                    <div class="stat-number">5</div>
+                    <div class="stat-label">Pending Assignments</div>
+                </div>
+                <div class="stat-card completed">
+                    <div class="stat-number">23</div>
+                    <div class="stat-label">Completed This Month</div>
+                </div>
+                <div class="stat-card overdue">
+                    <div class="stat-number">2</div>
+                    <div class="stat-label">Overdue</div>
+                </div>
+                <div class="stat-card upcoming">
+                    <div class="stat-number">7</div>
+                    <div class="stat-label">Due This Week</div>
+                </div>
+            </div>
+
+            <!-- View Toggle -->
+            <div class="view-toggle">
+                <button class="toggle-btn active" onclick="toggleView('list')">List View</button>
+                <button class="toggle-btn" onclick="toggleView('calendar')">Calendar View</button>
+            </div>
+
+            <!-- Filter Section -->
+            <div class="filter-section">
+                <div class="filter-controls">
+                    <div class="filter-group">
+                        <label>Subject:</label>
+                        <select class="filter-select" onchange="filterAssignments()">
+                            <option value="">All Subjects</option>
+                            <option value="mathematics">Mathematics</option>
+                            <option value="english">English</option>
+                            <option value="science">Science</option>
+                            <option value="history">History</option>
+                            <option value="geography">Geography</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Status:</label>
+                        <select class="filter-select" onchange="filterAssignments()">
+                            <option value="">All Status</option>
+                            <option value="pending">Pending</option>
+                            <option value="completed">Completed</option>
+                            <option value="overdue">Overdue</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Due Date:</label>
+                        <select class="filter-select" onchange="filterAssignments()">
+                            <option value="">All Dates</option>
+                            <option value="today">Due Today</option>
+                            <option value="week">Due This Week</option>
+                            <option value="month">Due This Month</option>
+                        </select>
+                    </div>
+                    <input type="text" class="search-input" placeholder="Search assignments..." onkeyup="searchAssignments()">
+                </div>
+            </div>
+
+            <!-- List View -->
+            <div id="list-view">
+                <div class="assignments-grid">
+                    <div class="assignment-card pending" data-subject="mathematics" data-status="pending">
+                        <div class="assignment-header">
+                            <div>
+                                <div class="assignment-title">Algebra Problem Set 5</div>
+                                <div class="assignment-subject">Mathematics</div>
+                            </div>
+                            <span class="assignment-status status-pending">Pending</span>
+                        </div>
+                        <div class="assignment-description">
+                            Complete exercises 1-20 from Chapter 8. Focus on quadratic equations and factoring methods.
+                        </div>
+                        <div class="assignment-details">
+                            <div class="due-date">Due: June 28, 2025</div>
+                            <div class="assignment-score">-/-</div>
+                        </div>
+                        <div class="assignment-actions">
+                            <button class="btn btn-primary">View Details</button>
+                            <button class="btn btn-secondary">Download</button>
+                        </div>
+                    </div>
+
+                    <div class="assignment-card overdue" data-subject="english" data-status="overdue">
+                        <div class="assignment-header">
+                            <div>
+                                <div class="assignment-title">Essay: Environmental Impact</div>
+                                <div class="assignment-subject">English</div>
+                            </div>
+                            <span class="assignment-status status-overdue">Overdue</span>
+                        </div>
+                        <div class="assignment-description">
+                            Write a 500-word essay on environmental conservation and its importance in modern society.
+                        </div>
+                        <div class="assignment-details">
+                            <div class="due-date">Due: June 25, 2025</div>
+                            <div class="assignment-score">-/-</div>
+                        </div>
+                        <div class="assignment-actions">
+                            <button class="btn btn-primary">Submit Late</button>
+                            <button class="btn btn-secondary">View Rubric</button>
+                        </div>
+                    </div>
+
+                    <div class="assignment-card completed" data-subject="science" data-status="completed">
+                        <div class="assignment-header">
+                            <div>
+                                <div class="assignment-title">Lab Report: Chemical Reactions</div>
+                                <div class="assignment-subject">Science</div>
+                            </div>
+                            <span class="assignment-status status-completed">Completed</span>
+                        </div>
+                        <div class="assignment-description">
+                            Document observations and conclusions from the acid-base reaction experiment.
+                        </div>
+                        <div class="assignment-details">
+                            <div class="due-date">Submitted: June 22, 2025</div>
+                            <div class="assignment-score">92/100</div>
+                        </div>
+                        <div class="assignment-actions">
+                            <button class="btn btn-primary">View Feedback</button>
+                            <button class="btn btn-secondary">Download</button>
+                        </div>
+                    </div>
+
+                    <div class="assignment-card pending" data-subject="history" data-status="pending">
+                        <div class="assignment-header">
+                            <div>
+                                <div class="assignment-title">Timeline Project: World War II</div>
+                                <div class="assignment-subject">History</div>
+                            </div>
+                            <span class="assignment-status status-pending">Pending</span>
+                        </div>
+                        <div class="assignment-description">
+                            Create a detailed timeline of major events during World War II with descriptions.
+                        </div>
+                        <div class="assignment-details">
+                            <div class="due-date">Due: July 2, 2025</div>
+                            <div class="assignment-score">-/-</div>
+                        </div>
+                        <div class="assignment-actions">
+                            <button class="btn btn-primary">Start Project</button>
+                            <button class="btn btn-secondary">Resources</button>
+                        </div>
+                    </div>
+
+                    <div class="assignment-card pending" data-subject="geography" data-status="pending">
+                        <div class="assignment-header">
+                            <div>
+                                <div class="assignment-title">Map Analysis: Climate Zones</div>
+                                <div class="assignment-subject">Geography</div>
+                            </div>
+                            <span class="assignment-status status-pending">Pending</span>
+                        </div>
+                        <div class="assignment-description">
+                            Analyze the world climate map and identify different climate zones with their characteristics.
+                        </div>
+                        <div class="assignment-details">
+                            <div class="due-date">Due: June 30, 2025</div>
+                            <div class="assignment-score">-/-</div>
+                        </div>
+                        <div class="assignment-actions">
+                            <button class="btn btn-primary">View Assignment</button>
+                            <button class="btn btn-secondary">Download Map</button>
+                        </div>
+                    </div>
+
+                    <div class="assignment-card completed" data-subject="mathematics" data-status="completed">
+                        <div class="assignment-header">
+                            <div>
+                                <div class="assignment-title">Geometry Quiz: Triangles</div>
+                                <div class="assignment-subject">Mathematics</div>
+                            </div>
+                            <span class="assignment-status status-completed">Completed</span>
+                        </div>
+                        <div class="assignment-description">
+                            Quiz covering triangle properties, angle calculations, and area formulas.
+                        </div>
+                        <div class="assignment-details">
+                            <div class="due-date">Completed: June 20, 2025</div>
+                            <div class="assignment-score">88/100</div>
+                        </div>
+                        <div class="assignment-actions">
+                            <button class="btn btn-primary">Review Answers</button>
+                            <button class="btn btn-secondary">Retake Quiz</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Calendar View -->
+            <div id="calendar-view" class="hidden">
+                <div class="calendar-view">
+                    <div class="calendar-header">
+                        <h3>June 2025</h3>
+                        <div class="calendar-nav">
+                            <button class="btn btn-secondary">← Previous</button>
+                            <button class="btn btn-primary">Today</button>
+                            <button class="btn btn-secondary">Next →</button>
+                        </div>
+                    </div>
+                    <div class="calendar-grid">
+                        <div class="calendar-day">Sun</div>
+                        <div class="calendar-day">Mon</div>
+                        <div class="calendar-day">Tue</div>
+                        <div class="calendar-day">Wed</div>
+                        <div class="calendar-day">Thu</div>
+                        <div class="calendar-day">Fri</div>
+                        <div class="calendar-day">Sat</div>
+                        
+                        <div class="calendar-day other-month">1</div>
+                        <div class="calendar-day">2</div>
+                        <div class="calendar-day">3</div>
+                        <div class="calendar-day">4</div>
+                        <div class="calendar-day">5</div>
+                        <div class="calendar-day">6</div>
+                        <div class="calendar-day">7</div>
+                        
+                        <div class="calendar-day">8</div>
+                        <div class="calendar-day">9</div>
+                        <div class="calendar-day">10</div>
+                        <div class="calendar-day">11</div>
+                        <div class="calendar-day">12</div>
+                        <div class="calendar-day">13</div>
+                        <div class="calendar-day">14</div>
+                        
+                        <div class="calendar-day">15</div>
+                        <div class="calendar-day">16</div>
+                        <div class="calendar-day">17</div>
+                        <div class="calendar-day">18</div>
+                        <div class="calendar-day">19</div>
+                        <div class="calendar-day">20
+                            <div class="assignment-dot dot-completed"></div>
+                        </div>
+                        <div class="calendar-day">21</div>
+                        
+                        <div class="calendar-day">22
+                            <div class="assignment-dot dot-completed"></div>
+                        </div>
+                        <div class="calendar-day">23</div>
+                        <div class="calendar-day">24</div>
+                        <div class="calendar-day">25
+                            <div class="assignment-dot dot-overdue"></div>
+                        </div>
+                        <div class="calendar-day today">26</div>
+                        <div class="calendar-day">27</div>
+                        <div class="calendar-day">28
+                            <div class="assignment-dot dot-pending"></div>
+                        </div>
+                        
+                        <div class="calendar-day">29</div>
+                        <div class="calendar-day">30
+                            <div class="assignment-dot dot-pending"></div>
+                        </div>
+                        <div class="calendar-day other-month">1
+                            <div class="assignment-dot dot-pending"></div>
+                        </div>
+                        <div class="calendar-day other-month">2
+                            <div class="assignment-dot dot-pending"></div>
+                        </div>
+                        <div class="calendar-day other-month">3</div>
+                        <div class="calendar-day other-month">4</div>
+                        <div class="calendar-day other-month">5</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Upcoming Deadlines -->
+            <div class="upcoming-deadlines">
+                <h3 style="margin-bottom: 20px;">Upcoming Deadlines</h3>
+                <div class="deadline-item">
+                    <div class="deadline-date">Jun 28</div>
+                    <div class="deadline-info">
+                        <div class="deadline-title">Algebra Problem Set 5</div>
+                        <div class="deadline-subject">Mathematics</div>
+                    </div>
+                </div>
+                <div class="deadline-item">
+                    <div class="deadline-date">Jun 30</div>
+                    <div class="deadline-info">
+                        <div class="deadline-title">Map Analysis: Climate Zones</div>
+                        <div class="deadline-subject">Geography</div>
+                    </div>
+                </div>
+                <div class="deadline-item">
+                    <div class="deadline-date">Jul 02</div>
+                    <div class="deadline-info">
+                        <div class="deadline-title">Timeline Project: World War II</div>
+                        <div class="deadline-subject">History</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleView(view) {
+            const listView = document.getElementById('list-view');
+            const calendarView = document.getElementById('calendar-view');
+            const toggleBtns = document.querySelectorAll('.toggle-btn');
+            
+            toggleBtns.forEach(btn => btn.classList.remove('active'));
+            
+            if (view === 'list') {
+                listView.classList.remove('hidden');
+                calendarView.classList.add('hidden');
+                toggleBtns[0].classList.add('active');
+            } else {
+                listView.classList.add('hidden');
+                calendarView.classList.remove('hidden');
+                toggleBtns[1].classList.add('active');
+            }
+        }
+
+        function filterAssignments() {
+            const subjectFilter = document.querySelector('.filter-select').value;
+            const statusFilter = document.querySelectorAll('.filter-select')[1].value;
+            const cards = document.querySelectorAll('.assignment-card');
+            
+            cards.forEach(card => {
+                const subject = card.dataset.subject;
+                const status = card.dataset.status;
+                
+                const subjectMatch = !subjectFilter || subject === subjectFilter;
+                const statusMatch = !statusFilter || status === statusFilter;
+                
+                if (subjectMatch && statusMatch) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        function searchAssignments() {
+            const searchTerm = document.querySelector('.search-input').value.toLowerCase();
+            const cards = document.querySelectorAll('.assignment-card');
+            
+            cards.forEach(card => {
+                const title = card.querySelector('.assignment-title').textContent.toLowerCase();
+                const description = card.querySelector('.assignment-description').textContent.toLowerCase();
+                const subject = card.querySelector('.assignment-subject').textContent.toLowerCase();
+                
+                if (title.includes(searchTerm) || description.includes(searchTerm) || subject.includes(searchTerm)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+</html>
